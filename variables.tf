@@ -736,3 +736,9 @@ variable "admin_access_entry_role_arns" {
   type        = list(string)
   default     = null
 }
+#### Network changes made for AWS NG architecture ####
+variable "additional_cidr_ranges" {
+  description = "Additionl cidr ranges to be associated with VPC"
+  type        = list(string)
+  default     = null
+}

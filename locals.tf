@@ -192,5 +192,4 @@ locals {
       "internal" : false
     }
   } : {}
-
 }
