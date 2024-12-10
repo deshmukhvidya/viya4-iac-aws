@@ -185,19 +185,48 @@ module "eks" {
   iam_role_additional_policies = {
     "additional" : "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   }
+#   access_entries = {
+#     # access entry with cluster and namespace scoped policies
+#     cluster_creator = {
+#       kubernetes_groups = ["rbac.authorization.k8s.io"]
+#       principal_arn     = data.aws_caller_identity.terraform.arn
+#       user_name         = local.aws_caller_identity_user_name
+#       type              = "STANDARD"
 
-  ## Use this to define any values that are common and applicable to all Node Groups
-  eks_managed_node_group_defaults = {
-    create_security_group  = false
-    vpc_security_group_ids = [local.workers_security_group_id]
+#       policy_associations = {
+#         cluster_creator_assoc = {
+#           policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+#           access_scope = {
+#             type = "cluster"
+#           }
+#         },
+#         namespace_creator_assoc = {
+#           policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
+#           access_scope = {
+#             type       = "namespace"
+#             namespaces = ["kube-system"]
+#           }
+#         }
+#       },
+#     },
+#   }
 
-    # BYO - EKS Workers IAM Role
-    create_iam_role = var.workers_iam_role_arn == null ? true : false
-    iam_role_arn    = var.workers_iam_role_arn
-  }
+#   iam_role_additional_policies = {
+#     "additional" : "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+#   }
 
-  ## Any individual Node Group customizations should go here
-  eks_managed_node_groups = local.node_groups
+#   ## Use this to define any values that are common and applicable to all Node Groups
+#   eks_managed_node_group_defaults = {
+#     create_security_group  = false
+#     vpc_security_group_ids = [local.workers_security_group_id]
+
+#     # BYO - EKS Workers IAM Role
+#     create_iam_role = var.workers_iam_role_arn == null ? true : false
+#     iam_role_arn    = var.workers_iam_role_arn
+#   }
+
+#   ## Any individual Node Group customizations should go here
+#   eks_managed_node_groups = local.node_groups
 }
 
 resource "aws_eks_access_entry" "instance" {
@@ -381,6 +410,10 @@ module "cloudwatch" {
   storage_type_backend = var.storage_type_backend
   efs_id               = local.efs_id
   fsx_id               = local.fsx_id
+  spoke_account_id     = var.spoke_account_id
+  location             = var.location
+  hub_environment      = var.hub_environment
+
 }
 
 ##########Spoke bucket for centralized logging########
