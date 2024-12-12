@@ -16,6 +16,7 @@ provider "aws" {
   token                    = var.aws_session_token
 
 
+
 }
 
 data "aws_eks_cluster_auth" "cluster" {
@@ -192,41 +193,48 @@ module "eks" {
 #       principal_arn     = data.aws_caller_identity.terraform.arn
 #       user_name         = local.aws_caller_identity_user_name
 #       type              = "STANDARD"
+  #   access_entries = {
+  #     # access entry with cluster and namespace scoped policies
+  #     cluster_creator = {
+  #       kubernetes_groups = ["rbac.authorization.k8s.io"]
+  #       principal_arn     = data.aws_caller_identity.terraform.arn
+  #       user_name         = local.aws_caller_identity_user_name
+  #       type              = "STANDARD"
 
-#       policy_associations = {
-#         cluster_creator_assoc = {
-#           policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
-#           access_scope = {
-#             type = "cluster"
-#           }
-#         },
-#         namespace_creator_assoc = {
-#           policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
-#           access_scope = {
-#             type       = "namespace"
-#             namespaces = ["kube-system"]
-#           }
-#         }
-#       },
-#     },
-#   }
+  #       policy_associations = {
+  #         cluster_creator_assoc = {
+  #           policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+  #           access_scope = {
+  #             type = "cluster"
+  #           }
+  #         },
+  #         namespace_creator_assoc = {
+  #           policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
+  #           access_scope = {
+  #             type       = "namespace"
+  #             namespaces = ["kube-system"]
+  #           }
+  #         }
+  #       },
+  #     },
+  #   }
 
-#   iam_role_additional_policies = {
-#     "additional" : "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-#   }
+  iam_role_additional_policies = {
+    "additional" : "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+  }
 
-#   ## Use this to define any values that are common and applicable to all Node Groups
-#   eks_managed_node_group_defaults = {
-#     create_security_group  = false
-#     vpc_security_group_ids = [local.workers_security_group_id]
+  ## Use this to define any values that are common and applicable to all Node Groups
+  eks_managed_node_group_defaults = {
+    create_security_group  = false
+    vpc_security_group_ids = [local.workers_security_group_id]
 
-#     # BYO - EKS Workers IAM Role
-#     create_iam_role = var.workers_iam_role_arn == null ? true : false
-#     iam_role_arn    = var.workers_iam_role_arn
-#   }
+    # BYO - EKS Workers IAM Role
+    create_iam_role = var.workers_iam_role_arn == null ? true : false
+    iam_role_arn    = var.workers_iam_role_arn
+  }
 
-#   ## Any individual Node Group customizations should go here
-#   eks_managed_node_groups = local.node_groups
+  ## Any individual Node Group customizations should go here
+  eks_managed_node_groups = local.node_groups
 }
 
 resource "aws_eks_access_entry" "instance" {
