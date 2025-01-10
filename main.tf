@@ -456,7 +456,6 @@ module "spoke_backup" {
   depends_on               = [module.resource_checker]
   selection_tag = var.selection_tag
   prefix = var.prefix
-  environment = var.environment
   
 
 

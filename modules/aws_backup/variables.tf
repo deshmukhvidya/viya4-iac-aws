@@ -122,8 +122,3 @@ variable "spoke_backup_rules" {
     }))
   }))
 }
-
-variable "environment" {
-  description = "Environment"
-  type        = string
-}
