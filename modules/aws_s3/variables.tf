@@ -46,3 +46,13 @@ variable "logging_account" {
   type        = string
 }
 
+variable "prefix" {
+  description = "A prefix used in the name for all cloud resources created by this script. The prefix string must start with a lowercase letter and contain only alphanumeric characters and hyphens or dashes (-), but cannot start or end with '-'."
+  type        = string
+
+  validation {
+    condition     = can(regex("^[a-z][-0-9a-z]*[0-9a-z]$", var.prefix))
+    error_message = "ERROR: Value of 'prefix'\n * must start with lowercase letter\n * can only contain lowercase letters, numbers, hyphens, or dashes (-), but cannot start or end with '-'."
+  }
+}
+

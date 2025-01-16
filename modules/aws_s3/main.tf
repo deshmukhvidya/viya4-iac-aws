@@ -5,12 +5,12 @@ data "aws_caller_identity" "current" {}
 
 
 resource "aws_s3_bucket" "local_s3_bucket" {
-  bucket              = "aws-waf-logs-infra-${var.spoke_account_id}-${var.location}-bkt"
+  bucket              = "aws-waf-logs-infra-${var.spoke_account_id}-${var.prefix}-${var.location}-bkt"
   force_destroy       = var.force_destroy
   object_lock_enabled = true
   tags = merge(
     {
-      "Name" = format("%s", "aws-waf-logs-infra-${var.spoke_account_id}-${var.location}-bkt"),
+      "Name" = format("%s", "aws-waf-logs-infra-${var.spoke_account_id}-${var.prefix}-${var.location}-bkt"),
     },
     var.tags
   )
@@ -82,7 +82,7 @@ data "aws_iam_policy_document" "assume_role_local" {
   }
 }
 resource "aws_iam_role" "replication_role_local" {
-  name               = "replication-role-${var.location}-${var.hub_environment}"
+  name               = "replication-role-${var.location}-${var.prefix}-${var.hub_environment}"
   assume_role_policy = data.aws_iam_policy_document.assume_role_local.json
   tags               = var.tags
 }

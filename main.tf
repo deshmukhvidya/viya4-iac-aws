@@ -435,6 +435,7 @@ module "spoke_logging_bucket" {
   hub_environment        = var.hub_environment
   logging_account        = var.logging_account
   depends_on             = [module.resource_checker]
+  prefix = var.prefix
 }
 
 ###################################Config Conformance Pack############################
