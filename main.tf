@@ -435,7 +435,7 @@ module "spoke_logging_bucket" {
   hub_environment        = var.hub_environment
   logging_account        = var.logging_account
   depends_on             = [module.resource_checker]
-  prefix = var.prefix
+  prefix                 = var.prefix
 }
 
 ###################################Config Conformance Pack############################
@@ -465,7 +465,7 @@ module "spoke_waf" {
   count               = var.enable_nist_features == true && local.waf_exists == "false" ? 1 : 0
   depends_on          = [module.spoke_logging_bucket, module.resource_checker]
   source              = "./modules/aws_waf"
-  local_s3_bucket_arn = var.enable_nist_features == false ? null : local.bucket_exists == "false" ? module.spoke_logging_bucket[0].local_s3_bucket_arn : "arn:aws:s3:::aws-waf-logs-infra-${var.spoke_account_id}-${var.location}-bkt"
+  local_s3_bucket_arn = var.enable_nist_features == false ? null : local.bucket_exists == "false" ? module.spoke_logging_bucket[0].local_s3_bucket_arn : "arn:aws:s3:::aws-waf-logs-infra-${var.prefix}-${var.location}-${var.spoke_account_id}-bkt"
   spoke_account_id    = var.spoke_account_id
   location            = var.location
   tags                = local.tags

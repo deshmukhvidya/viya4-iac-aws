@@ -1,12 +1,12 @@
 
 ### backup valut creation ###
 resource "aws_backup_vault" "spoke" {
-  name        = "ng-${var.spoke_account_id}-${var.prefix}-backup-vault"
+  name        = "${var.prefix}-${var.spoke_account_id}-backup-vault-ng"
   kms_key_arn = aws_kms_key.spoke_vault_key.arn
   tags = merge(
     var.tags,
     {
-      Name = "ng-${var.spoke_account_id}-${var.prefix}-backup-vault"
+      Name = "${var.prefix}-${var.spoke_account_id}-backup-vault-ng"
     }
   )
 

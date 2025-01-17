@@ -5,12 +5,12 @@ data "aws_caller_identity" "current" {}
 
 
 resource "aws_s3_bucket" "local_s3_bucket" {
-  bucket              = "aws-waf-logs-infra-${var.spoke_account_id}-${var.prefix}-${var.location}-bkt"
+  bucket              = "aws-waf-logs-infra-${var.prefix}-${var.location}-${var.spoke_account_id}-bkt"
   force_destroy       = var.force_destroy
   object_lock_enabled = true
   tags = merge(
     {
-      "Name" = format("%s", "aws-waf-logs-infra-${var.spoke_account_id}-${var.prefix}-${var.location}-bkt"),
+      "Name" = format("%s", "aws-waf-logs-infra-${var.prefix}-${var.location}-${var.spoke_account_id}-bkt"),
     },
     var.tags
   )
@@ -82,7 +82,7 @@ data "aws_iam_policy_document" "assume_role_local" {
   }
 }
 resource "aws_iam_role" "replication_role_local" {
-  name               = "replication-role-${var.location}-${var.prefix}-${var.hub_environment}"
+  name               = "${var.prefix}-${var.location}-replication-role-${var.hub_environment}"
   assume_role_policy = data.aws_iam_policy_document.assume_role_local.json
   tags               = var.tags
 }
@@ -193,7 +193,7 @@ resource "aws_s3_bucket_policy" "allow_access_from_another_account" {
 EOF
 }
 resource "aws_iam_policy" "replication_policy_local" {
-  name   = "replication-policy${var.location}-${var.hub_environment}"
+  name   = "${var.prefix}-${var.location}-replication-policy-${var.hub_environment}"
   policy = data.aws_iam_policy_document.replication_json.json
   tags   = var.tags
 }
